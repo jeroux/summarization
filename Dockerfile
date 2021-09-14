@@ -1,6 +1,6 @@
 FROM python:3.9-slim-buster
 
-LABEL maintainer=["Julien Alardot <alardotj.pro@@gmail.com>", ]
+LABEL maintainer="Julien Alardot <alardotj.pro@@gmail.com>"
 
 WORKDIR /usr/src/app
 #RUN export FLASK_APP=none
