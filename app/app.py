@@ -3,6 +3,7 @@ TEST_VALUE = "Hello World!"
 import os
 import requests
 import pandas as pd
+import numpy as np
 import streamlit as st
 
 PATH = os.path.abspath(os.path.dirname(__file__))
@@ -14,7 +15,11 @@ def get_book_id():
     return selection.iloc[0]
 
 
-books = pd.read_csv(os.path.join(DATAPATH, "pg_catalog.csv"), sep=',')
+books = pd.read_csv(os.path.join(DATAPATH, "pg_catalog.csv"), sep=',', dtype={
+    "Text#":np.int32,
+    "Type": "category",
+    "Issued": "datetime",
+    "Language": "category"})
 titles = books['Title']
 titles.drop_duplicates(inplace=True)
 titles.dropna(inplace=True)
