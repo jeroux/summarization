@@ -1,14 +1,18 @@
 TEST_VALUE = "Hello World!"
 
 import os
-
-# To make things easier later, we're also importing numpy and pandas for
-# working with sample data.
+import requests
 import pandas as pd
 import streamlit as st
 
 PATH = os.path.abspath(os.path.dirname(__file__))
 DATAPATH = os.path.join(PATH, "data")
+
+
+def get_book_id():
+    selection = books[books['Title'] == title]['Text#']
+    return selection.iloc[0]
+
 
 books = pd.read_csv(os.path.join(DATAPATH, "pg_catalog.csv"), sep=',')
 titles = books['Title']
@@ -17,16 +21,23 @@ titles.dropna(inplace=True)
 
 st.title('Summarizer')
 
-option = st.sidebar.selectbox(
-    'Which number do you like best?',
+title = st.sidebar.selectbox(
+    'Which book do you want?',
     titles)
 
-'You selected:', option
+'You selected:', title
 
 left_column, right_column = st.columns(2)
-pressed = left_column.button('Press me?')
+pressed = left_column.button('confirm')
 if pressed:
-    right_column.write("Woohoo!")
+    book_id = str(get_book_id())
+    url = f"https://www.gutenberg.org/files/{book_id}/{book_id}-h/{book_id}-h.htm"
+
+    r = requests.get(url)
+    fichiers = os.listdir(DATAPATH)
+    if book_id+'.html' not in fichiers:
+        with open(os.path.join(DATAPATH, book_id+'.html'), 'w') as file:
+            file.write(r.text)
 
 expander = st.expander("FAQ")
 expander.write("Here you could put in some really, really long explanations...")
