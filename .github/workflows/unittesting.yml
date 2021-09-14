@@ -5,9 +5,9 @@ name: Unittesting
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, extract_html ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, extract_html ]
 
 jobs:
   build:
