@@ -18,8 +18,8 @@ def get_book_id():
 books = pd.read_csv(os.path.join(DATAPATH, "pg_catalog.csv"), sep=',', dtype={
     "Text#":np.int32,
     "Type": "category",
-    "Issued": "datetime",
     "Language": "category"})
+books.iloc[:,"Issued"]= pd.to_datetime(books["Issued"], yearfirst=True)
 titles = books['Title']
 titles.drop_duplicates(inplace=True)
 titles.dropna(inplace=True)
