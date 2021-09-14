@@ -1,4 +1,4 @@
-name: books_summarization
+name: Docker Image Main
 
 on:
   push:
