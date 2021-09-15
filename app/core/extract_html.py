@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 
 class BreakDownBook:
     def __init__(self, html_filepath):
-        with open(html_filepath, "r") as html:
+        with open(html_filepath, "r", encoding="utf-8") as html:
             self.soup = BeautifulSoup(html, features="html.parser")
 
         now = self.soup.find("body").findNext("div", attrs=dict(style="display:block; "
