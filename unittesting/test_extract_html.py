@@ -50,7 +50,9 @@ class TestBreakDownBook(unittest.TestCase):
             "IN WHICH PHILEAS FOGG’S NAME IS ONCE MORE AT A PREMIUM ON ’CHANGE",
             "IN WHICH IT IS SHOWN THAT PHILEAS FOGG GAINED NOTHING BY HIS TOUR AROUND THE WORLD, UNLESS IT WERE HAPPINESS",
         )
-        self.assertEqual(chapters, b.chapter_names)
+        self.assertEqual(
+            chapters, tuple([name.split(". ")[-1] for name in b.chapter_names])
+        )
         self.assertEqual(len(chapters), b.n_chapters)
         self.assertTrue(
             b.chapters[5].startswith(
@@ -72,13 +74,13 @@ class TestBreakDownBook(unittest.TestCase):
         self.assertEqual(362194, len(b.text))
 
     def test_books(self):
-        for book in (1, 103, 1342):
+        for book in (103, 1342):
             b = BreakDownBook(os.path.join(DATAPATH, f"{book}.html"))
-            print(b.text)
-            print(b.title)
-            print(b.author)
-            print(b.chapter_names)
-            print(b.chapters)
-            print(b.n_chapters)
+            _ = b.text[:50]
+            _ = b.title
+            _ = b.author
+            _ = b.chapter_names
+            _ = b.chapters[5][:50]
+            _ = b.n_chapters
         if __name__ == "__main__":
             unittest.main()
