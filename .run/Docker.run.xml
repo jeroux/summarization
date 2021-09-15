@@ -2,9 +2,17 @@
   <configuration default="false" name="Docker" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
     <deployment type="dockerfile">
       <settings>
-        <option name="imageTag" value="books_summarization" />
-        <option name="containerName" value="Book-Summarization" />
-        <option name="sourceFilePath" value="Dockerfile" />
+          <option name="imageTag" value="books_summarization"/>
+          <option name="containerName" value="Book-Summarization"/>
+          <option name="portBindings">
+              <list>
+                  <DockerPortBindingImpl>
+                      <option name="containerPort" value="8501"/>
+                      <option name="hostPort" value="8501"/>
+                  </DockerPortBindingImpl>
+              </list>
+          </option>
+          <option name="sourceFilePath" value="Dockerfile"/>
       </settings>
     </deployment>
     <method v="2" />
