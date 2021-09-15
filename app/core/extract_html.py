@@ -39,6 +39,10 @@ class BreakDownBook:
     def n_chapters(self):
         return len(self.chapter_names)
 
+    @property
+    def text(self):
+        return "\n".join(self.chapters)
 
 if __name__ == "__main__":
     b = BreakDownBook("../../app/data/103.html")
+    print(len(b.text))

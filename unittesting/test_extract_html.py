@@ -68,5 +68,7 @@ class TestBreakDownBook(unittest.TestCase):
                 "passenger bowed to fix, and returned to the steamer."
             )
         )
+
+        self.assertEqual(362194, len(b.text))
         if __name__ == "__main__":
             unittest.main()
