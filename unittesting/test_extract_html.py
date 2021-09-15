@@ -70,5 +70,15 @@ class TestBreakDownBook(unittest.TestCase):
         )
 
         self.assertEqual(362194, len(b.text))
+
+    def test_books(self):
+        for book in (1, 103, 1342):
+            b = BreakDownBook(os.path.join(DATAPATH, f"{book}.html"))
+            print(b.text)
+            print(b.title)
+            print(b.author)
+            print(b.chapter_names)
+            print(b.chapters)
+            print(b.n_chapters)
         if __name__ == "__main__":
             unittest.main()

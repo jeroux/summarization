@@ -43,11 +43,11 @@ if pressed:
     r = requests.get(url)
     fichiers = os.listdir(DATAPATH)
     if book_id + ".html" not in fichiers:
-        with open(os.path.join(DATAPATH, book_id + ".html"), "w", encoding="utf-8") as file:
+        with open(
+                os.path.join(DATAPATH, book_id + ".html"), "w", encoding="utf-8"
+        ) as file:
             file.write(r.text)
 
     book = BreakDownBook(os.path.join(DATAPATH, book_id + ".html"))
     bart = Bart(book.text)
     expander.write(bart.summary)
-
-
