@@ -1,13 +1,11 @@
-TEST_VALUE = "Hello World!"
-
 import os
 import requests
 import pandas as pd
 import numpy as np
 import streamlit as st
 
-from core.extract_html import BreakDownBook
-from core.ml.transformersML import Bart
+from app.core.extract_html import BreakDownBook
+from app.core.ml.transformersML import Bart
 
 PATH = os.path.abspath(os.path.dirname(__file__))
 DATAPATH = os.path.join(PATH, "data")
