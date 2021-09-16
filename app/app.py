@@ -19,7 +19,7 @@ def get_book_id():
 books = pd.read_csv(
     os.path.join(DATAPATH, "pg_catalog.csv"),
     sep=",",
-    dtype={"Text#": np.int32, "Type": "category", "Language": "category"},
+    dtype={"Text#": np.int32, "Type": "category", "Language": "category"}, low_memory=False
 )
 titles = books["Title"]
 titles.drop_duplicates(inplace=True)
