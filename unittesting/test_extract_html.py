@@ -74,6 +74,9 @@ class TestBreakDownBook(unittest.TestCase):
         self.assertEqual(362194, len(b.text))
 
     def test_books(self):
+        '''
+        Not working files 1, 2
+        '''
         for book in (103, 1342):
             b = BreakDownBook(os.path.join(DATAPATH, f"{book}.html"))
             _ = b.text[:50]
@@ -82,5 +85,12 @@ class TestBreakDownBook(unittest.TestCase):
             _ = b.chapter_names
             _ = b.chapters[5][:50]
             _ = b.n_chapters
-        if __name__ == "__main__":
-            unittest.main()
+
+    def test_clean_text(self):
+        text = "azerty\n  \tazerty"
+        expected_text = "azerty azerty"
+        self.assertEqual(expected_text, BreakDownBook.clean_text(text))
+
+
+if __name__ == "__main__":
+    unittest.main()
