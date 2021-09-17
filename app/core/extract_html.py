@@ -55,11 +55,8 @@ class BreakDownBook:
         self.chapter_names = tuple(self.chapter_names)
 
     def _extract_case_title_h(self, body):
-        raise NotImplementedError("WIP")
-        now = body
-        del body
-        now = now.findNext("h1")
-        self.title = now.text
+        now = body.findNext("h1")
+        self.title = self.clean_text(now.text)
         print(self.title)
         author = now.findNext("h2")
         previous_author = None
@@ -74,32 +71,34 @@ class BreakDownBook:
 
         self.chapters = list()
         self.chapter_names = list()
-        preface_title = now.findNext("h2")
-        now = now.findNext("p")
-
+        now = body.findNext("h1")
+        print(now)
+        print(now.findNext("h1"))
+        now = now.findNext("h1")
         next_chapter = chapter = now.findNext("h2")
-        if chapter != preface_title:
-            self.chapter_names.append(self.clean_text(chapter.text))
-        else:
-            self.chapter_names.append("")
+        del body
+
         text = self.clean_text(now.text)
         text_concat.append(text)
         i = 0
         while now:
-            print(i, text, chapter, next_chapter)
+            print(str([i, text, chapter, next_chapter]))
             i += 1
             next_chapter = now.findNext("h2")
-            if chapter != next_chapter:
-                now = now.findNext("p")
-                text = self.clean_text(now.text)
-                text_concat.append(text)
-            else:
+            if chapter == next_chapter:
                 self.chapters.append("\n".join(text_concat))
                 chapter = now.findNext("h2")
                 self.chapter_names.append(self.clean_text(chapter.text))
+                text_concat = list()
+            text = self.clean_text(now.text)
+            text_concat.append(text)
+            now = now.findNext("p")
+        if len(self.chapters) > len(self.chapter_names):
+            self.chapter_names = [""] + self.chapter_names
+        self.chapter_names = tuple(self.chapter_names)
+        self.chapters = tuple(self.chapters)
 
-        print(self.title, self.author, self.chapter_names, len(self.chapters), len(self.chapters_names))
-        raise NotImplementedError
+        print(self.title, self.author, self.chapter_names, len(self.chapters), len(self.chapter_names))
 
     @staticmethod
     def clean_text(text):
