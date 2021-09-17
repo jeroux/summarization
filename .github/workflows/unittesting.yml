@@ -5,9 +5,9 @@ name: Unittesting
 
 on:
   push:
-    branches: [ main, book_testing, dev ]
+    branches: [ main, book_testing, dev, qaModel ]
   pull_request:
-    branches: [ main, books_testing, dev ]
+    branches: [ main, books_testing, dev, qaModel ]
 
 jobs:
   build:
