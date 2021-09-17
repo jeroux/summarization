@@ -9,9 +9,12 @@ RUN apt-get update -y
 #RUN apt-get install ffmpeg libsm6 libxext6  -y
 
 COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+COPY ./app/DockerPreLoadModels.py ./app/DockerPreLoadModels.py
 RUN pip install --upgrade pip
+RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 8501
+
+RUN python ./app/DockerPreLoadModels.py
 COPY . .
 CMD [ "streamlit","run", "./app/app.py" ]
