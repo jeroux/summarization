@@ -5,7 +5,7 @@ import numpy as np
 import streamlit as st
 
 from core.extract_html import BreakDownBook
-from core.ml.transformersML import Bart
+from core.ml.qamodel import QABookBart
 
 PATH = os.path.abspath(os.path.dirname(__file__))
 DATAPATH = os.path.join(PATH, "data")
@@ -48,5 +48,5 @@ if pressed:
         ) as file:
             file.write(r.text)
 
-    bart = Bart(os.path.join(DATAPATH, book_id + ".html"))
+    bart = QABookBart(os.path.join(DATAPATH, book_id + ".html"))
     expander.write(bart.summary)
