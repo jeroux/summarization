@@ -51,11 +51,10 @@ expander4 = st.expander('FAQ')
 
 if submit_button:
     book_id = str(get_book_id(books))
-    url = f"https://www.gutenberg.org/files/{book_id}/{book_id}-h/{book_id}-h.htm"
-
-    r = requests.get(url)
     fichiers = os.listdir(DATAPATH)
     if book_id + ".html" not in fichiers:
+        url = f"https://www.gutenberg.org/files/{book_id}/{book_id}-h/{book_id}-h.htm"
+        r = requests.get(url)
         with open(
                 os.path.join(DATAPATH, book_id + ".html"), "w", encoding="utf-8"
         ) as file:
