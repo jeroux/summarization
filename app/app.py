@@ -6,6 +6,8 @@ import streamlit as st
 
 from core.extract_html import BreakDownBook
 from core.ml.qamodel import QABookBart
+from core.ml.summarizer import Summarizer
+
 
 PATH = os.path.abspath(os.path.dirname(__file__))
 DATAPATH = os.path.join(PATH, "data")
@@ -21,6 +23,7 @@ books = pd.read_csv(
     sep=",",
     dtype={"Text#": np.int32, "Type": "category", "Language": "category"}, low_memory=False
 )
+books = books[books["Type"] == "Text"]
 titles = books["Title"]
 titles.drop_duplicates(inplace=True)
 titles.dropna(inplace=True)
@@ -35,6 +38,8 @@ left_column, right_column = st.columns(2)
 pressed = left_column.button("confirm")
 expander = st.expander("Bart")
 expander.write("Here will come the Bart summary")
+expander2 = st.expander("GPT")
+expander3 = st.expander("XLM")
 
 if pressed:
     book_id = str(get_book_id())
@@ -49,4 +54,6 @@ if pressed:
             file.write(r.text)
 
     bart = QABookBart(os.path.join(DATAPATH, book_id + ".html"))
-    expander.write(bart.summary)
+    expander.write(bart.bart_summary)
+
+

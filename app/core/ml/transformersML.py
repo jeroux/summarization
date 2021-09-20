@@ -23,8 +23,9 @@ class Bart(BreakDownBook):
                 self.by_chapter_summary += [self.summarize(chapter, self.gen_tokenizer, self.gen_model)]
             self.by_chapter_summary = tuple(self.by_chapter_summary)
 
-            self.summary = "\n".join(self.by_chapter_summary)
-            self.short_summary = self.summarize("\n".join(self.by_chapter_summary), self.gen_tokenizer, self.gen_model)
+            self.bart_summary = "\n".join(self.by_chapter_summary)
+            self.bart_short_summary = self.summarize("\n".join(self.by_chapter_summary), tokenizer, model)
+
             self.save_cache()
         else:
             with open(self.cached[self.file_id], "rt") as cache_json:
@@ -33,8 +34,8 @@ class Bart(BreakDownBook):
             self.author = cache["author"]
             self.chapters = cache["chapters"]
             self.chapter_names = cache["chapter_names"]
-            self.summary = cache["summary"]
-            self.short_summary = cache["short_summary"]
+            self.bart_summary = cache["bart_summary"]
+            self.bart_short_summary = cache["bart_short_summary"]
 
     def summarize(self, text, tokenizer, model):
         inputs = tokenizer.batch_encode_plus([text],
@@ -52,8 +53,8 @@ class Bart(BreakDownBook):
             cache["author"] = self.author
             cache["chapters"] = self.chapters
             cache["chapter_names"] = self.chapter_names
-            cache["summary"] = self.summary
-            cache["short_summary"] = self.short_summary
+            cache["bart_summary"] = self.bart_summary
+            cache["bart_short_summary"] = self.bart_short_summary
             json.dump(cache, cache_json)
 
 
