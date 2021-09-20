@@ -102,7 +102,7 @@ class BreakDownBook:
 
     @staticmethod
     def clean_text(text):
-        text.replace("\n", " ").replace("\t", " ")
+        text = text.replace("\n", " ").replace("\t", " ")
         text = " ".join([x for x in text.split(' ') if x])
         return text
 
