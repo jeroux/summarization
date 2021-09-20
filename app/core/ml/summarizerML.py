@@ -1,7 +1,6 @@
 import json
 import os
 
-from gensim.summarization.summarizer import summarize
 
 from core.ml.transformersML import Bert, GPT2, XLM
 from ..extract_html import BreakDownBook
