@@ -35,8 +35,8 @@ st.title("Summarizer")
 with st.sidebar:
 
     with st.form(key='my_form'):
-        title = st.form.selectbox("Which book do you want?", titles)
-        st.form("How many chapters do you want?", min_value=1, max_value=1000, value=1, step=1, key="nb_chapitres")
+        title = st.selectbox("Which book do you want?", titles)
+        st.form.slidebar("How many chapters do you want?", min_value=1, max_value=1000, value=1, step=1, key="nb_chapitres")
         submit_button = st.form_submit_button(label='Submit parameters')
 
 
