@@ -1,26 +1,7 @@
 question,question_class
-Who is the protagonist?,question_protagonist
 Who is the main character?,question_protagonist
-Who is the main hero?,question_protagonist
-Who is the hero of the book?,question_protagonist
-Who are the characters?,question_characters
-Who are the heroes?,question_characters
 Who helps the hero?,question_characters
-Who helps the main character?,question_characters
-Who works with the protagonist?,question_characters
-Who works with the hero of the story?,question_characters
-Who wrote the book?,question_author
-Who is the author?,question_author
-Who is the writer of the book?,question_author
-Who wrote the story?,question_author
-When did the book was written?,question_pub_date
-When was the book written?,question_pub_date
-When did the author wrote that book?,question_pub_date
-When does the story takes place?,question_story_date
+Who is the author of the book?,question_author
+When did the book published?,question_pub_date
 When the events of the book are taking place?,question_story_date
-When does the book events takes place?,question_story_date
-When are the events taking place?,question_story_date
-How long is the book?,question_length
-How many chapters are they?,question_length
-How long is the story?,question_length
 How long is the book?,question_length
