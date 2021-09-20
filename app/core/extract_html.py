@@ -43,11 +43,10 @@ class BreakDownBook:
             self.chapter_names.append(chapter_name)
             chapter = "\n".join(
                 [
-                    x.text.lower().replace("\n", " ").replace("\t", " ")
+                    self.clean_text(x)
                     for x in now.findAll("p")
                 ]
             )
-            chapter = " ".join(x for x in chapter.split(" ") if x).replace(" \n", "\n").replace(",", "").replace("'", "")
             self.chapters.append(chapter)
 
             now = now.findNext("div", class_="chapter")
