@@ -23,6 +23,9 @@ class BreakDownBook:
     def text(self):
         return "\n".join(self.chapters)
 
+    def get_text_until_n_chapter(self, n):
+        return "\n".join(self.chapters[:n])
+
     def _extract_classic(self, body):
         now = body
         del body
@@ -41,13 +44,12 @@ class BreakDownBook:
             chapter_name = now.find("h2").text.replace("\n", " ").replace("\t", " ")
             chapter_name = " ".join([x for x in chapter_name.split(" ") if x])
             self.chapter_names.append(chapter_name)
-            chapter = "\n".join(
+            chapter = " ".join(
                 [
-                    x.text.lower().replace("\n", " ").replace("\t", " ")
-                    for x in now.findAll("p")
+                    self.clean_text(x.text)
+                    for x in now.findAll("p") if x
                 ]
             )
-            chapter = " ".join(x for x in chapter.split(" ") if x).replace(" \n", "\n").replace(",", "").replace("'", "")
             self.chapters.append(chapter)
 
             now = now.findNext("div", class_="chapter")
@@ -86,7 +88,7 @@ class BreakDownBook:
             i += 1
             next_chapter = now.findNext("h2")
             if chapter == next_chapter:
-                self.chapters.append("\n".join(text_concat))
+                self.chapters.append(" ".join(text_concat))
                 chapter = now.findNext("h2")
                 self.chapter_names.append(self.clean_text(chapter.text))
                 text_concat = list()
@@ -102,7 +104,7 @@ class BreakDownBook:
 
     @staticmethod
     def clean_text(text):
-        text.replace("\n", " ").replace("\t", " ")
+        text = text.replace("\n", " ").replace("\t", " ").lower()
         text = " ".join([x for x in text.split(' ') if x])
         return text
 

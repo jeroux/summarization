@@ -41,6 +41,7 @@ expander = st.expander("Bert")
 expander.write("Here will come the Bart summary")
 expander2 = st.expander("GPT")
 expander3 = st.expander("XLM")
+expander4 = st.expander('FAQ')
 
 if pressed:
     book_id = str(get_book_id())
@@ -55,8 +56,9 @@ if pressed:
             file.write(r.text)
 
     summerizer_model = QABookSummerizerML(os.path.join(DATAPATH, book_id + ".html"))
-    expander.write("<p align='justify'>"+summerizer_model.bert_summary+"</p>", unsafe_allow_html=True)
-    expander2.write("<p align='justify'>"+summerizer_model.gpt_summary+"</p>", unsafe_allow_html=True)
-    expander3.write("<p align='justify'>"+summerizer_model.xlm_summary+"</p>", unsafe_allow_html=True)
+    expander.write("<p align='justify'>" + summerizer_model.bert_summary + "</p>", unsafe_allow_html=True)
+    expander2.write("<p align='justify'>" + summerizer_model.gpt_summary + "</p>", unsafe_allow_html=True)
+    expander3.write("<p align='justify'>" + summerizer_model.xlm_summary + "</p>", unsafe_allow_html=True)
+    expander4.write(summerizer_model.faq)
 
 

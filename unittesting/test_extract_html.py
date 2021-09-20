@@ -56,22 +56,20 @@ class TestBreakDownBook(unittest.TestCase):
         self.assertEqual(len(chapters), b.n_chapters)
         self.assertTrue(
             b.chapters[5].startswith(
-                "the circumstances under which this telegraphic dispatch about "
-                "phileas fogg was sent were as follows:\n the steamer “mongolia,” "
-                "belonging to the peninsular and oriental company, built of iron, of "
-                "two thousand eight hundred tons burden, and five hundred"
+                'the circumstances under which this telegraphic dispatch about phileas fogg was sent were as follows: '
+                'the steamer “mongolia,” belonging to the peninsular and oriental company, built of iron, of two '
+                'thousand eight hundred tons burden, and five hundred '
             )
         )
         self.assertTrue(
             b.chapters[5].endswith(
-                " the consulate?”\n “there, on the corner of the square,” said fix, "
-                "pointing to a house two hundred steps off.\n “i’ll go and fetch my "
-                "master, who won’t be much pleased, however, to be disturbed.”\n the "
-                "passenger bowed to fix, and returned to the steamer."
+                "is the consulate?” “there, on the corner of the square,” said fix, pointing to a house two hundred "
+                "steps off. “i’ll go and fetch my master, who won’t be much pleased, however, to be disturbed.” "
+                "the passenger bowed to fix, and returned to the steamer."
             )
         )
 
-        self.assertEqual(362194, len(b.text))
+        self.assertEqual(360620, len(b.text))
 
     def test_books(self):
         '''
