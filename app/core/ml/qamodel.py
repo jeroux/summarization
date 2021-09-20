@@ -43,8 +43,17 @@ class QABookSummerizerML(SummarizerML):
     def faq(self):
         q_a = pd.DataFrame([], columns=("Question", "Answer"), dtype=str)
         q_a.iloc[:, :] = [["What is the book title?", self.title.upper()],
-                          ["Who is the author of the book?", " ".join([x.capitalize() for x in self.author.split(" ")])]]
-        return self.questions
+                          ["Who is the author of the book?", self.prettify_text(self.author)],
+                          ["How long is the book?", f"The book is composed of {self.n_chapters} chapters"]]
+        q_a.append([])
+        return q_a
+
+    @staticmethod
+    def prettify_text(text, full_cap=True):
+        if full_cap:
+            return " ".join([x.capitalize() for x in text.split(" ") if x])
+        else:
+            return " ".join([x for x in text.split(" ") if x]).capitalize()
 
 
 if __name__ == "__main__":

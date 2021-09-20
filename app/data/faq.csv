@@ -1,7 +1,3 @@
 question,question_class
-Who is the main character?,question_protagonist
-Who helps the hero?,question_characters
-Who is the author of the book?,question_author
-When did the book published?,question_pub_date
 When the events of the book are taking place?,question_story_date
-How long is the book?,question_length
+Where does the events of the book are taking place,question_story_place
