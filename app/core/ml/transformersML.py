@@ -14,16 +14,17 @@ class Bart(BreakDownBook):
 
         self.cached = {int(x.replace("\\", "/").split("/")[-1].split(".")[0]): os.path.join(self.data_path, x)
                        for x in os.listdir(self.data_path) if x.endswith(".json")}
+        self.gen_tokenizer = BartTokenizer.from_pretrained('facebook/bart-large-cnn')
+        self.gen_model = BartForConditionalGeneration.from_pretrained('facebook/bart-large-cnn')
+
         if self.file_id not in self.cached:
-            tokenizer = BartTokenizer.from_pretrained('facebook/bart-large-cnn')
-            model = BartForConditionalGeneration.from_pretrained('facebook/bart-large-cnn')
             self.by_chapter_summary = list()
             for chapter in self.chapters:
-                self.by_chapter_summary += [self.summarize(chapter, tokenizer, model)]
+                self.by_chapter_summary += [self.summarize(chapter, self.gen_tokenizer, self.gen_model)]
             self.by_chapter_summary = tuple(self.by_chapter_summary)
 
             self.summary = "\n".join(self.by_chapter_summary)
-            self.short_summary = self.summarize("\n".join(self.by_chapter_summary), tokenizer, model)
+            self.short_summary = self.summarize("\n".join(self.by_chapter_summary), self.gen_tokenizer, self.gen_model)
             self.save_cache()
         else:
             with open(self.cached[self.file_id], "rt") as cache_json:
@@ -32,6 +33,8 @@ class Bart(BreakDownBook):
             self.author = cache["author"]
             self.chapters = cache["chapters"]
             self.chapter_names = cache["chapter_names"]
+            self.summary = cache["summary"]
+            self.short_summary = cache["short_summary"]
 
     def summarize(self, text, tokenizer, model):
         inputs = tokenizer.batch_encode_plus([text],
@@ -49,6 +52,8 @@ class Bart(BreakDownBook):
             cache["author"] = self.author
             cache["chapters"] = self.chapters
             cache["chapter_names"] = self.chapter_names
+            cache["summary"] = self.summary
+            cache["short_summary"] = self.short_summary
             json.dump(cache, cache_json)
 
 
