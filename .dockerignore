@@ -1,3 +1,6 @@
-.git*
+*git*
 .run
+venv
+.idea
+*cache*
 unittesting

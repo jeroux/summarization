@@ -5,4 +5,3 @@ requests~=2.26.0
 beautifulsoup4~=4.8.2
 transformers~=4.10.2
 torch~=1.9
-gensim<=3.8.3

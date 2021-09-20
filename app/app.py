@@ -6,8 +6,8 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 
-from core.ml.summarizer import Summarizer
-
+from core.extract_html import BreakDownBook
+from core.ml.transformersML import Bart
 
 PATH = os.path.abspath(os.path.dirname(__file__))
 DATAPATH = os.path.join(PATH, "data")
@@ -23,7 +23,6 @@ books = pd.read_csv(
     sep=",",
     dtype={"Text#": np.int32, "Type": "category", "Language": "category"},
 )
-books = books[books["Type"] == "Text"]
 titles = books["Title"]
 titles.drop_duplicates(inplace=True)
 titles.dropna(inplace=True)
@@ -49,7 +48,8 @@ if pressed:
         with open(os.path.join(DATAPATH, book_id + ".html"), "w", encoding="utf-8") as file:
             file.write(r.text)
 
-    bart = Summarizer(os.path.join(DATAPATH, book_id + ".html"))
-    expander.write(bart.bart_summary)
+    book = BreakDownBook(os.path.join(DATAPATH, book_id + ".html"))
+    bart = Bart(book.text)
+    expander.write(bart.summary)
 
 

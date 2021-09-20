@@ -5,35 +5,15 @@ class BreakDownBook:
     def __init__(self, html_filepath):
         with open(html_filepath, "r", encoding="utf-8") as html:
             self.soup = BeautifulSoup(html, features="html.parser")
-
-        now = self.soup.find("body").findNext("div", attrs=dict(style="display:block; "
-                                                                      "margin-top:1em; "
-                                                                      "margin-bottom:1em; "
-                                                                      "margin-left:2em; "
-                                                                      "text-indent:-2em"))
-        title = now.text.replace("\n", " ").replace("\t", " ")
-        self.title = " ".join([l for l in title.split(" ") if l]).split(": ")[-1]
-        now = now.findNext("div", attrs=dict(style="display:block; "
-                                                   "margin-top:1em; "
-                                                   "margin-bottom:1em; "
-                                                   "margin-left:2em; "
-                                                   "text-indent:-2em"))
-        author = now.text.replace("\n", " ").replace('\t', " ")
-        self.author = " ".join([l for l in author.split(" ") if l]).split(": ")[-1]
-
-        now = now.findNext("table", attrs=dict(summary="", style=""))
-        table = now.findNext("tbody")
-        chapters = [" ".join(x for x in element.text.replace("\n", " ").replace("\t", " ").split(" ")
-                             if x).split(". ")[-1]
-                    for element in table.find_all("tr")]
-        self.chapter_names = tuple(chapters)
-        self.chapters = list()
-        for chapter in self.chapter_names:
-            now = now.findNext("div", class_="chapter")
-            chapter = "\n".join([x.text.lower().replace("\n", " ").replace("\t", " ") for x in now.findAll("p")])
-            chapter = " ".join(x for x in chapter.split(" ") if x).replace(" \n", "\n")
-            self.chapters.append(chapter)
-        self.chapters = tuple(self.chapters)
+        now = body = self.soup.find("body")
+        while not now.text.startswith("Title"):
+            now = now.findNext("div")
+            if not now:
+                break
+        if now:
+            self._extract_classic(now)
+        else:
+            self._extract_case_title_h(body)
 
     @property
     def n_chapters(self):
@@ -42,6 +22,90 @@ class BreakDownBook:
     @property
     def text(self):
         return "\n".join(self.chapters)
+
+    def _extract_classic(self, body):
+        now = body
+        del body
+
+        title = now.text.replace("\n", " ").replace("\t", " ")
+        self.title = " ".join([l for l in title.split(" ") if l]).split(": ")[-1]
+        while not now.text.startswith("Author"):
+            now = now.findNext("div")
+        author = now.text.replace("\n", " ").replace("\t", " ")
+        self.author = " ".join([l for l in author.split(" ") if l]).split(": ")[-1]
+
+        self.chapter_names = list()
+        self.chapters = list()
+        now = now.findNext("div", class_="chapter")
+        while now:
+            chapter_name = now.find("h2").text.replace("\n", " ").replace("\t", " ")
+            chapter_name = " ".join([x for x in chapter_name.split(" ") if x])
+            self.chapter_names.append(chapter_name)
+            chapter = "\n".join(
+                [
+                    x.text.lower().replace("\n", " ").replace("\t", " ")
+                    for x in now.findAll("p")
+                ]
+            )
+            chapter = " ".join(x for x in chapter.split(" ") if x).replace(" \n", "\n")
+            self.chapters.append(chapter)
+
+            now = now.findNext("div", class_="chapter")
+        self.chapters = tuple(self.chapters)
+        self.chapter_names = tuple(self.chapter_names)
+
+    def _extract_case_title_h(self, body):
+        now = body.findNext("h1")
+        self.title = self.clean_text(now.text)
+        print(self.title)
+        author = now.findNext("h2")
+        previous_author = None
+        while author:
+            print(previous_author, author)
+            previous_author = author
+            author = author.findNext("h2")
+
+        self.author = self.clean_text(previous_author.text)
+        print(self.author)
+        text_concat = list()
+
+        self.chapters = list()
+        self.chapter_names = list()
+        now = body.findNext("h1")
+        print(now)
+        print(now.findNext("h1"))
+        now = now.findNext("h1")
+        next_chapter = chapter = now.findNext("h2")
+        del body
+
+        text = self.clean_text(now.text)
+        text_concat.append(text)
+        i = 0
+        while now:
+            print(str([i, text, chapter, next_chapter]))
+            i += 1
+            next_chapter = now.findNext("h2")
+            if chapter == next_chapter:
+                self.chapters.append("\n".join(text_concat))
+                chapter = now.findNext("h2")
+                self.chapter_names.append(self.clean_text(chapter.text))
+                text_concat = list()
+            text = self.clean_text(now.text)
+            text_concat.append(text)
+            now = now.findNext("p")
+        if len(self.chapters) > len(self.chapter_names):
+            self.chapter_names = [""] + self.chapter_names
+        self.chapter_names = tuple(self.chapter_names)
+        self.chapters = tuple(self.chapters)
+
+        print(self.title, self.author, self.chapter_names, len(self.chapters), len(self.chapter_names))
+
+    @staticmethod
+    def clean_text(text):
+        text.replace("\n", " ").replace("\t", " ")
+        text = " ".join([x for x in text.split(' ') if x])
+        return text
+
 
 if __name__ == "__main__":
     b = BreakDownBook("../../app/data/103.html")
