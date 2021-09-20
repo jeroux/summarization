@@ -2,12 +2,12 @@ import torch
 from transformers import AutoTokenizer, AutoModelForQuestionAnswering
 
 from core.extract_html import BreakDownBook
-from core.ml.transformersML import Bart
+from core.ml.summarizerML import SummarizerML
 
 
-class QABookBart(Bart):
+class QABookSummerizerML(SummarizerML):
     def __init__(self, html_filepath):
-        super(QABookBart, self).__init__(html_filepath=html_filepath)
+        super(QABookSummerizerML, self).__init__(html_filepath=html_filepath)
         self.tokenizer = AutoTokenizer.from_pretrained("valhalla/bart-large-finetuned-squadv1")
         self.model = AutoModelForQuestionAnswering.from_pretrained("valhalla/bart-large-finetuned-squadv1")
         self.output = "No Data has been processed"
@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
     ROOTPATH = (os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
     DATAPATH = os.path.join(ROOTPATH, "data")
-    qab = QABookBart(os.path.join(DATAPATH, "103.html"))
+    qab = QABookSummerizerML(os.path.join(DATAPATH, "103.html"))
 
     print("Question: Who is the main character?", "\nAnswer: " + qab("Who is the main character?"))
     print("Question: What is the main challenge?", "\nAnswer: " + qab("What is the main challenge?"))

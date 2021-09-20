@@ -4,9 +4,7 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 
-from core.extract_html import BreakDownBook
-from core.ml.qamodel import QABookBart
-from core.ml.summarizer import Summarizer
+from core.ml.qamodel import QABookSummerizerML
 
 
 PATH = os.path.abspath(os.path.dirname(__file__))
@@ -53,7 +51,7 @@ if pressed:
         ) as file:
             file.write(r.text)
 
-    bart = QABookBart(os.path.join(DATAPATH, book_id + ".html"))
-    expander.write(bart.bart_summary)
+    summerizer_model = QABookSummerizerML(os.path.join(DATAPATH, book_id + ".html"))
+    expander.write(summerizer_model.bart_summary)
 
 
