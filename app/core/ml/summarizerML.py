@@ -1,12 +1,10 @@
 import json
 import os
 
-from gensim.summarization.summarizer import summarize
-
 from core.ml.transformersML import Bert, GPT2, XLM
 from ..extract_html import BreakDownBook
 
-DECOUPE_CHAPITRE = 2
+DECOUPE_CHAPITRE = 3
 
 
 class SummarizerML(BreakDownBook):
@@ -55,7 +53,7 @@ class SummarizerML(BreakDownBook):
                 chapter = self.chapters[index:index + DECOUPE_CHAPITRE]
             else:
                 chapter = self.chapters[index:]
-            chapter = '\nChapitre\n'.join(chapter)
+            chapter = '\n'.join(chapter)
 
             self.bert_summary += Bert(chapter).summary
 

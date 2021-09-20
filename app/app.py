@@ -32,9 +32,12 @@ title = st.sidebar.selectbox("Which book do you want?", titles)
 
 "You selected:", title
 
+st.slider("How many chapters do you want?", min_value=1, max_value=1000, value=1, step=1, key="nb_chapitres")
+
+
 left_column, right_column = st.columns(2)
 pressed = left_column.button("confirm")
-expander = st.expander("Bart")
+expander = st.expander("Bert")
 expander.write("Here will come the Bart summary")
 expander2 = st.expander("GPT")
 expander3 = st.expander("XLM")
@@ -52,6 +55,8 @@ if pressed:
             file.write(r.text)
 
     summerizer_model = QABookSummerizerML(os.path.join(DATAPATH, book_id + ".html"))
-    expander.write(summerizer_model.bart_summary)
+    expander.write("<p align='justify'>"+summerizer_model.bert_summary+"</p>", unsafe_allow_html=True)
+    expander2.write("<p align='justify'>"+summerizer_model.gpt_summary+"</p>", unsafe_allow_html=True)
+    expander3.write("<p align='justify'>"+summerizer_model.xlm_summary+"</p>", unsafe_allow_html=True)
 
 
