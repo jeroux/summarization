@@ -53,5 +53,8 @@ if pressed:
 
     summerizer_model = QABookSummerizerML(os.path.join(DATAPATH, book_id + ".html"))
     expander.write(summerizer_model.bart_summary)
+    expander.write(summerizer_model.gpt_summary)
+    expander.write(summerizer_model.xlm_summary)
+    expander.writer(summerizer_model.faq)
 
 

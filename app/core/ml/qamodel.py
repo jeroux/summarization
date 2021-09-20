@@ -38,6 +38,9 @@ class QABookSummerizerML(SummarizerML):
 
         return answer
 
+    def faq(self):
+        return "WIP"
+
 
 if __name__ == "__main__":
     import os
