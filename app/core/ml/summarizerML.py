@@ -8,18 +8,19 @@ DECOUPE_CHAPITRE = 3
 
 
 class SummarizerML(BreakDownBook):
-    def __init__(self, html_filepath):
+    def __init__(self, html_filepath, chapters_summary_limit=-1):
         super(SummarizerML, self).__init__(html_filepath)
         self.bert_summary = ''
         self.gpt_summary = ''
         self.xlm_summary = ''
+        self.chapters_summary_limit = chapters_summary_limit
         self.file_id = html_filepath.replace("\\", "/").split("/")[-1].split(".")[0]
         self.data_path = os.path.dirname(html_filepath)
 
         self.cached = {int(x.replace("\\", "/").split("/")[-1].split(".")[0]): os.path.join(self.data_path, x)
                        for x in os.listdir(self.data_path) if x.endswith(".json")}
 
-        if self.file_id not in self.cached:
+        if self.file_id not in self.cached or chapters_summary_limit !=-1:
             # self.by_chapter_summary = list()
             # for chapter in self.chapters:
             #     self.by_chapter_summary += [self.summarize(chapter, self.gen_tokenizer, self.gen_model)]
@@ -44,7 +45,8 @@ class SummarizerML(BreakDownBook):
     def bert(self):
 
         print("nbrs chapitres:", self.n_chapters)
-        for index in range(0, len(self.chapters), DECOUPE_CHAPITRE):
+        chapters_summary_limit = self.n_chapters if self.chapters_summary_limit < 1 else self.chapters_summary_limit
+        for index in range(0, min(self.n_chapters, chapters_summary_limit), DECOUPE_CHAPITRE):
             print(index)
 
             if index + DECOUPE_CHAPITRE + 1 < len(self.chapters):

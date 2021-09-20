@@ -6,8 +6,9 @@ from core.ml.summarizerML import SummarizerML
 
 
 class QABookSummerizerML(SummarizerML):
-    def __init__(self, html_filepath):
-        super(QABookSummerizerML, self).__init__(html_filepath=html_filepath)
+    def __init__(self, html_filepath, chapters_summary_limit=-1):
+        super(QABookSummerizerML, self).__init__(html_filepath=html_filepath,
+                                                 chapters_summary_limit=chapters_summary_limit)
         self.tokenizer = AutoTokenizer.from_pretrained("valhalla/bart-large-finetuned-squadv1")
         self.model = AutoModelForQuestionAnswering.from_pretrained("valhalla/bart-large-finetuned-squadv1")
         self.output = "No Data has been processed"
@@ -45,7 +46,9 @@ class QABookSummerizerML(SummarizerML):
         q_a.iloc[:, :] = [["What is the book title?", self.title.upper()],
                           ["Who is the author of the book?", self.prettify_text(self.author)],
                           ["How long is the book?", f"The book is composed of {self.n_chapters} chapters"]]
-        q_a.append([])
+        for i, question in self.questions.iterrows():
+            question = question[0]
+        q_a.append({"Question": question, "Answer": self.prettify_text(self.qa(question))})
         return q_a
 
     @staticmethod
