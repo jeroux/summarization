@@ -48,6 +48,5 @@ if pressed:
         ) as file:
             file.write(r.text)
 
-    book = BreakDownBook(os.path.join(DATAPATH, book_id + ".html"))
-    bart = Bart(book.text)
+    bart = Bart(os.path.join(DATAPATH, book_id + ".html"))
     expander.write(bart.summary)
