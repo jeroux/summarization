@@ -1,7 +1,7 @@
+import pandas as pd
 import torch
 from transformers import AutoTokenizer, AutoModelForQuestionAnswering
 
-from core.extract_html import BreakDownBook
 from core.ml.summarizerML import SummarizerML
 
 
@@ -11,6 +11,8 @@ class QABookSummerizerML(SummarizerML):
         self.tokenizer = AutoTokenizer.from_pretrained("valhalla/bart-large-finetuned-squadv1")
         self.model = AutoModelForQuestionAnswering.from_pretrained("valhalla/bart-large-finetuned-squadv1")
         self.output = "No Data has been processed"
+        self.questions = pd.read_csv(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "data"),
+                                     "faq.csv")
 
     def __call__(self, question):
         return self.qa(question)
@@ -39,7 +41,10 @@ class QABookSummerizerML(SummarizerML):
         return answer
 
     def faq(self):
-        return "WIP"
+        q_a = pd.DataFrame([], columns=("Question", "Answer"), dtype=str)
+        q_a.iloc[:, :] = [["What is the book title?", self.title.upper()],
+                          ["Who is the author of the book?", " ".join([x.capitalize() for x in self.author.split(" ")])]]
+        return self.questions
 
 
 if __name__ == "__main__":
