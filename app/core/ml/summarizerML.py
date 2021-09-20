@@ -38,8 +38,6 @@ class SummarizerML(BreakDownBook):
             self.author = cache["author"]
             self.chapters = cache["chapters"]
             self.chapter_names = cache["chapter_names"]
-            self.bart_summary = cache["bart_summary"]
-            self.bart_short_summary = cache["bart_short_summary"]
             self.bert_summary = cache["bert_summary"]
             self.gpt_summary = cache["gpt_summary"]
             self.xlm_summary = cache["xlm_summary"]
