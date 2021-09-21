@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+import os
 
 
 class BreakDownBook:
@@ -24,7 +25,7 @@ class BreakDownBook:
         return " ".join(self.chapters)
 
     def get_text_until_n_chapter(self, n):
-        return "\n".join(self.chapters[:n+1])
+        return "".join(self.chapters[:n+1])
 
     def _extract_classic(self, body):
         now = body

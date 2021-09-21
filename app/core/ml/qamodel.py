@@ -1,3 +1,5 @@
+import os
+
 import pandas as pd
 import torch
 from transformers import AutoTokenizer, AutoModelForQuestionAnswering
@@ -6,26 +8,29 @@ from core.ml.summarizerML import SummarizerML
 
 
 class QABookSummerizerML(SummarizerML):
-    def __init__(self, html_filepath, chapters_summary_limit=-1):
+    def __init__(self, html_filepath, chapters_summary_limit=-1, cuda=False):
         super(QABookSummerizerML, self).__init__(html_filepath=html_filepath,
                                                  chapters_summary_limit=chapters_summary_limit)
-        self.tokenizer = AutoTokenizer.from_pretrained("valhalla/bart-large-finetuned-squadv1")
-        self.model = AutoModelForQuestionAnswering.from_pretrained("valhalla/bart-large-finetuned-squadv1")
+        self.tokenizer = AutoTokenizer.from_pretrained("deepset/roberta-base-squad2")
+        self.model = AutoModelForQuestionAnswering.from_pretrained("deepset/roberta-base-squad2")
         self.output = "No Data has been processed"
-        self.questions = pd.read_csv(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "data"),
-                                     "faq.csv")
+        self.questions = pd.read_csv(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "data",
+                                     "faq.csv"))
+        self.cuda = torch.cuda.is_available() and cuda
+        if self.cuda:
+            self.model = self.model.cuda()
 
     def __call__(self, question):
         return self.qa(question)
 
     def qa(self, question):
-        answer_text = self.summary
+        answer_text = self.bert_summary + " " + self.gpt_summary + " " + self.xlm_summary
         inputs = self.tokenizer.encode_plus(question.lower(), answer_text, add_special_tokens=True, return_tensors="pt")
         input_ids = inputs["input_ids"].tolist()[0]
 
         outputs = self.model(**inputs)
-        answer_start_scores = outputs.start_logits
-        answer_end_scores = outputs.end_logits
+        answer_start_scores = outputs.start_logits.cpu()
+        answer_end_scores = outputs.end_logits.cpu()
 
         answer_start = torch.argmax(
             answer_start_scores
@@ -60,8 +65,6 @@ class QABookSummerizerML(SummarizerML):
 
 
 if __name__ == "__main__":
-    import os
-
     ROOTPATH = (os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
     DATAPATH = os.path.join(ROOTPATH, "data")
     qab = QABookSummerizerML(os.path.join(DATAPATH, "103.html"))
