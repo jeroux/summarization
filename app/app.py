@@ -17,7 +17,6 @@ def get_book_id(books):
 
 @st.cache
 def get_books_data():
-    import os
     books = pd.read_csv(
         os.path.join(DATAPATH, "pg_catalog.csv"),
         sep=",",
@@ -52,7 +51,6 @@ expander3 = st.expander("XLM")
 expander4 = st.expander('FAQ')
 
 if submit_button:
-    import os
     book_id = str(get_book_id(books))
     fichiers = os.listdir(DATAPATH)
     if book_id + ".html" not in fichiers:
