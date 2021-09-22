@@ -1,4 +1,5 @@
 import os
+import time
 
 import torch
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
@@ -12,6 +13,7 @@ class Model:
         self.max_length = 2048
 
     def __call__(self, text):
+        start = time.time()
         self.summary = ""
         if self.cuda:
             self.model = self.model.cuda()
@@ -30,6 +32,7 @@ class Model:
                 ids = inputs["input_ids"]
                 outputs = self.model.generate(ids, length_penalty=2.0, num_beams=4, early_stopping=True, max_length=512)
             self.summary += " " + self.tokenizer.decode(outputs[0])
+        print(time.time() - start, self.__class__)
         return self.summary.replace("  ", " ")
 
 

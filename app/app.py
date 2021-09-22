@@ -40,7 +40,7 @@ with st.sidebar.form(key='my_form'):
               key="nb_chapitres")
     submit_button = st.form_submit_button(label='Submit parameters')
 
-
+question_button = None
 
 "You selected:", title
 
@@ -65,5 +65,12 @@ if submit_button:
     expander2.write("<p align='justify'>" + summerizer_model.gpt_summary + "</p>", unsafe_allow_html=True)
     expander3.write("<p align='justify'>" + summerizer_model.xlm_summary + "</p>", unsafe_allow_html=True)
     expander4.write(summerizer_model.faq())
+    expander4.write(summerizer_model.faq)
+    question = st.text_input("Do you have a question on the book?", value="Who is the author of the book?")
+    question_button = st.button("Ask")
+
+if question_button:
+    answer = summerizer_model.qa(question)
+    st.text(answer)
 
 
