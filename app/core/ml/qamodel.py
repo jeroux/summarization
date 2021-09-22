@@ -25,7 +25,8 @@ class QABookSummerizerML(SummarizerML):
 
     def qa(self, question):
         answer_text = self.bert_summary + " " + self.gpt_summary + " " + self.xlm_summary
-        inputs = self.tokenizer.encode_plus(question.lower(), answer_text, add_special_tokens=True, return_tensors="pt")
+        inputs = self.tokenizer.encode_plus(question.lower(), answer_text, add_special_tokens=True, return_tensors="pt",
+                                            max_length=512)
         input_ids = inputs["input_ids"].tolist()[0]
 
         outputs = self.model(**inputs)

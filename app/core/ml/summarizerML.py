@@ -46,7 +46,7 @@ class SummarizerML(BreakDownBook):
 
             self.save_cache()
         else:
-            with open(self.cached[self.file_id], "rt") as cache_json:
+            with open(self.cached[self.file_id], "rt", encoding="utf-8") as cache_json:
                 cache = json.load(cache_json)
             self.title = cache["title"]
             self.author = cache["author"]
@@ -59,7 +59,7 @@ class SummarizerML(BreakDownBook):
 
     def save_cache(self):
         self.cached[self.file_id] = os.path.join(self.data_path, str(self.file_id) + ".json")
-        with open(self.cached[self.file_id], "w+") as cache_json:
+        with open(self.cached[self.file_id], "w+", encoding="utf-8") as cache_json:
             cache = dict()
             cache["title"] = self.title
             cache["author"] = self.author
@@ -68,4 +68,4 @@ class SummarizerML(BreakDownBook):
             cache["bert_summary"] = self.bert_summary
             cache["gpt_summary"] = self.gpt_summary
             cache["xlm_summary"] = self.xlm_summary
-            json.dump(cache, cache_json)
+            json.dump(cache, cache_json,sort_keys=True, indent=4)
