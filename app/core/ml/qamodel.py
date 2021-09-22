@@ -27,9 +27,9 @@ class QABookSummerizerML(SummarizerML):
         answer_text = self.bert_summary + " " + self.gpt_summary + " " + self.xlm_summary
         inputs = self.tokenizer.encode_plus(question.lower(), answer_text, add_special_tokens=True, return_tensors="pt",
                                             max_length=512)
-        input_ids = inputs["input_ids"].tolist()[0]
         if self.cuda:
-            input_ids = {k:v.cuda() for k, v in input_ids.items()}
+            input_ids = {k:v.cuda() for k, v in inputs.items()}
+        input_ids = inputs["input_ids"].tolist()[0]
         outputs = self.model(**inputs)
         answer_start_scores = outputs.start_logits.cpu()
         answer_end_scores = outputs.end_logits.cpu()
