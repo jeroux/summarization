@@ -71,6 +71,6 @@ if submit_button:
 
 if question_button:
     answer = summerizer_model.qa(question)
-    st.text(answer)
+    st.write("answer = " + answer)
 
 

@@ -21,22 +21,27 @@ class SummarizerML(BreakDownBook):
                        for x in os.listdir(self.data_path) if x.endswith(".json")}
 
         self.cuda=cuda
-        if self.file_id not in self.cached or chapters_summary_limit != 200:
+
+        if int(self.file_id) not in self.cached or chapters_summary_limit != 200:
             # self.by_chapter_summary = list()
             # for chapter in self.chapters:
             #     self.by_chapter_summary += [self.summarize(chapter, self.gen_tokenizer, self.gen_model)]
             # self.by_chapter_summary = tuple(self.by_chapter_summary)
-            bert = Bert( cuda=self.cuda)
-            gpt2 = GPT2( cuda=self.cuda)
-            xlm = XLM( cuda=self.cuda)
+            bert = Bert(cuda=self.cuda)
+            gpt2 = GPT2(cuda=self.cuda)
+            xlm = XLM(cuda=self.cuda)
             bert.cuda = gpt2.cuda = xlm.cuda = self.cuda
             if chapters_summary_limit < self.n_chapters:
                 text = self.chapters[:chapters_summary_limit]
             else:
                 text = self.chapters
+            print("début Bert")
             bert(text)
+            print("début GTP2")
             gpt2(text)
+            print("début XLM")
             xlm(text)
+            print("fin XLM")
             self.bert_summary = bert.summary
             print(self.bert_summary)
             self.gpt_summary = gpt2.summary
@@ -46,7 +51,7 @@ class SummarizerML(BreakDownBook):
 
             self.save_cache()
         else:
-            with open(self.cached[self.file_id], "rt", encoding="utf-8") as cache_json:
+            with open(self.cached[int(self.file_id)], "rt", encoding="utf-8") as cache_json:
                 cache = json.load(cache_json)
             self.title = cache["title"]
             self.author = cache["author"]

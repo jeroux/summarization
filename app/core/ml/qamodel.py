@@ -26,7 +26,7 @@ class QABookSummerizerML(SummarizerML):
     def qa(self, question):
         answer_text = self.bert_summary + " " + self.gpt_summary + " " + self.xlm_summary
         inputs = self.tokenizer.encode_plus(question.lower(), answer_text, add_special_tokens=True, return_tensors="pt",
-                                            max_length=512)
+                                            max_length=512, truncation=True)
         if self.cuda:
             input_ids = {k:v.cuda() for k, v in inputs.items()}
         input_ids = inputs["input_ids"].tolist()[0]
@@ -49,13 +49,14 @@ class QABookSummerizerML(SummarizerML):
         return answer
 
     def faq(self):
-        q_a = pd.DataFrame([], columns=("Question", "Answer"), dtype=str)
-        q_a.iloc[:, :] = [["What is the book title?", self.title.upper()],
+
+        q_a_list = [["What is the book title?", self.title.upper()],
                           ["Who is the author of the book?", self.prettify_text(self.author)],
                           ["How long is the book?", f"The book is composed of {self.n_chapters} chapters"]]
+        q_a = pd.DataFrame(q_a_list, columns=("Question", "Answer"), dtype=str)
         for i, question in self.questions.iterrows():
             question = question[0]
-        q_a.append({"Question": self.clean_text(question), "Answer": self.prettify_text(self.qa(question))})
+            q_a.append({"Question": self.clean_text(question), "Answer": self.prettify_text(self.qa(question))}, ignore_index=True)
         return q_a
 
     @staticmethod

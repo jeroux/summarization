@@ -33,7 +33,7 @@ class Model:
                 outputs = self.model.generate(ids, length_penalty=2.0, num_beams=4, early_stopping=True, max_length=512)
             self.summary += " " + self.tokenizer.decode(outputs[0])
         print(time.time() - start, self.__class__)
-        return self.summary.replace("  ", " ")
+        return self.summary.replace("  ", " ").replace("</s>", "").replace("<s>", "")
 
 
 class Bert(Model):
