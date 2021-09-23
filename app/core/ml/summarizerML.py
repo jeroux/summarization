@@ -66,6 +66,27 @@ class SummarizerML(BreakDownBook):
             self.chapter_names = ["Unknown"]
             self.xlm_summary = xlm.summary
 
+                self.save_cache()
+            else:
+                with open(self.cached[int(self.file_id)], "rt", encoding="utf-8") as cache_json:
+                    cache = json.load(cache_json)
+                self.title = cache["title"]
+                self.author = cache["author"]
+                self.chapters = cache["chapters"]
+                self.chapter_names = cache["chapter_names"]
+                self.bert_summary = cache["bert_summary"]
+                self.gpt_summary = cache["gpt_summary"]
+                self.xlm_summary = cache["xlm_summary"]
+                # self.bert_summary += str(text)
+        elif puretext:
+            xlm = XLM( cuda=self.cuda)
+            xlm(puretext)
+            self.title = "Custom text"
+            self.author = "Unknown"
+            self.chapters = ["Unknown"]
+            self.chapter_names = ["Unknown"]
+            self.xlm_summary = xlm.summary
+
 
     def save_cache(self):
         self.cached[self.file_id] = os.path.join(self.data_path, str(self.file_id) + ".json")
