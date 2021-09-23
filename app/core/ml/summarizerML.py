@@ -22,7 +22,6 @@ class SummarizerML(BreakDownBook):
             self.cached = {int(x.replace("\\", "/").split("/")[-1].split(".")[0]): os.path.join(self.data_path, x)
                            for x in os.listdir(self.data_path) if x.endswith(".json")}
 
-
             if int(self.file_id) not in self.cached or chapters_summary_limit != 200:
                 # self.by_chapter_summary = list()
                 # for chapter in self.chapters:
@@ -55,27 +54,6 @@ class SummarizerML(BreakDownBook):
                 self.chapter_names = cache["chapter_names"]
                 self.bert_summary = ""
                 self.gpt_summary = ""
-                self.xlm_summary = cache["xlm_summary"]
-                # self.bert_summary += str(text)
-        elif puretext:
-            xlm = XLM( cuda=self.cuda)
-            xlm(puretext)
-            self.title = "Custom text"
-            self.author = "Unknown"
-            self.chapters = ["Unknown"]
-            self.chapter_names = ["Unknown"]
-            self.xlm_summary = xlm.summary
-
-                self.save_cache()
-            else:
-                with open(self.cached[int(self.file_id)], "rt", encoding="utf-8") as cache_json:
-                    cache = json.load(cache_json)
-                self.title = cache["title"]
-                self.author = cache["author"]
-                self.chapters = cache["chapters"]
-                self.chapter_names = cache["chapter_names"]
-                self.bert_summary = cache["bert_summary"]
-                self.gpt_summary = cache["gpt_summary"]
                 self.xlm_summary = cache["xlm_summary"]
                 # self.bert_summary += str(text)
         elif puretext:

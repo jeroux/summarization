@@ -15,17 +15,13 @@ class Model:
     def __call__(self, text):
         start = time.time()
         self.summary = ""
-        print("One")
         text = [text] if not isinstance(text, (list, tuple)) else text
-        print("Two")
         if self.cuda:
             self.model = self.model.cuda()
-        print("Three")
         for chapter in text:
-            print("Four")
-            print(chapter)
             words = chapter.split(" ")
             print(len(words))
+            outputs = list()
             while words:
                 batch_size = min(self.max_length, len(words))
                 batch, words = " ".join(words[:batch_size]), words[batch_size:]
@@ -35,8 +31,8 @@ class Model:
                 if self.cuda:
                     inputs = {k: v.cuda() for k, v in inputs.items()}
                 ids = inputs["input_ids"]
-                outputs = self.model.generate(ids, length_penalty=2.0, num_beams=4, early_stopping=True, max_length=100)
-            self.summary += " " + self.tokenizer.decode(outputs[0]).replace("  ", " ").replace("</s>", "").replace("<s>", "")
+                outputs = self.model.generate(ids, length_penalty=2.0, num_beams=4, early_stopping=True, max_length=120)
+            self.summary += "\n" + self.tokenizer.decode(outputs[0]).replace("  ", " ").replace("</s>", "").replace("<s>", "")
         print(time.time() - start, self.__class__)
         return self.summary
 

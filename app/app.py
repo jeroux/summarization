@@ -76,7 +76,7 @@ if submit_button:
 
     t1, t2, t3, t4, summerizer_model = generate_summary(book_id)
     answer = summerizer_model.qa(question) if question else "No question asked"
-    st.write("answer = " + answer)
+    t4 += f"\nQuestion: {question}\nAnswer: {answer}"
 
 
 expander.write(t1, unsafe_allow_html=True)

@@ -25,7 +25,7 @@ class QABookSummerizerML(SummarizerML):
         return self.qa(question)
 
     def qa(self, question):
-        answer_text = self.bert_summary + " " + self.gpt_summary + " " + self.xlm_summary
+        answer_text = self.bert_summary.replace("\n", " ") + " " + self.gpt_summary.replace("\n", " ") + " " + self.xlm_summary.replace("\n", " ")
         inputs = self.tokenizer.encode_plus(question.lower(), answer_text, add_special_tokens=True, return_tensors="pt",
                                             max_length=512, truncation=True)
         if self.cuda:
@@ -46,7 +46,8 @@ class QABookSummerizerML(SummarizerML):
             self.tokenizer.convert_ids_to_tokens(input_ids[answer_start:answer_end]))
         # Combine the tokens in the answer and print it out.""
         answer = answer.replace("#", "").replace("<s>", "").replace("</s>", "")
-        if not answer:
+        print(answer, answer.startswith(question.lower()))
+        if not answer or answer.startswith(question.lower()):
             answer = "No answer found"
         return answer
 
