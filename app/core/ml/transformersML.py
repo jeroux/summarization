@@ -30,10 +30,10 @@ class Model:
                 if self.cuda:
                     inputs = {k: v.cuda() for k, v in inputs.items()}
                 ids = inputs["input_ids"]
-                outputs = self.model.generate(ids, length_penalty=2.0, num_beams=4, early_stopping=True, max_length=512)
-            self.summary += " " + self.tokenizer.decode(outputs[0])
+                outputs = self.model.generate(ids, length_penalty=2.0, num_beams=4, early_stopping=True, max_length=100)
+            self.summary += " " + self.tokenizer.decode(outputs[0]).replace("  ", " ").replace("</s>", "").replace("<s>", "")
         print(time.time() - start, self.__class__)
-        return self.summary.replace("  ", " ").replace("</s>", "").replace("<s>", "")
+        return self.summary
 
 
 class Bert(Model):
