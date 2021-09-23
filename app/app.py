@@ -4,7 +4,6 @@ import numpy as np
 import pandas as pd
 import requests
 import streamlit as st
-import bs4
 
 from core.ml.qamodel import QABookSummerizerML
 
@@ -32,7 +31,7 @@ def get_books_data():
     return books, tuple(titles.values)
 
 
-#@st.cache(hash_funcs={bs4.element.ContentMetaAttributeValue: lambda x: 10101010101})
+# @st.cache(hash_funcs={bs4.element.ContentMetaAttributeValue: lambda x: 10101010101})
 def generate_summary(book_id):
     summerizer_model = QABookSummerizerML(os.path.join(DATAPATH, book_id + ".html"), chapters_summary_limit=slider)
     text1 = "<p align='justify'>" + summerizer_model.bert_summary + "</p>"
@@ -44,7 +43,6 @@ def generate_summary(book_id):
 
 t1 = t2 = t3 = t4 = ''
 books, titles = get_books_data()
-
 st.title("Summarizer")
 
 with st.sidebar.form(key='my_form'):
@@ -77,7 +75,7 @@ if submit_button:
             file.write(r.text)
 
     t1, t2, t3, t4, summerizer_model = generate_summary(book_id)
-    answer = summerizer_model.qa(question)
+    answer = summerizer_model.qa(question) if question else "No question asked"
     st.write("answer = " + answer)
 
 

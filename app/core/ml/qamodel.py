@@ -75,6 +75,6 @@ if __name__ == "__main__":
     DATAPATH = os.path.join(ROOTPATH, "data")
     qab = QABookSummerizerML(os.path.join(DATAPATH, "1342.html"), 200, cuda=True)
 
-    print("Question: Who is the main character?", "\nAnswer: " + qab("Who is the main character?"))
+    print("Question: Who is Elisabeth?", "\nAnswer: " + qab("Who is Elisabeth?"))
     print("Question: Who is Passepartout?", "\nAnswer: " + qab("Who is Passepartout?"))
     print("Question: Who is Aouta?", "\nAnswer: " + qab("Who is Aouta?"))

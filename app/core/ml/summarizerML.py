@@ -53,8 +53,8 @@ class SummarizerML(BreakDownBook):
                 self.author = cache["author"]
                 self.chapters = cache["chapters"]
                 self.chapter_names = cache["chapter_names"]
-                self.bert_summary = cache["bert_summary"]
-                self.gpt_summary = cache["gpt_summary"]
+                self.bert_summary = ""
+                self.gpt_summary = ""
                 self.xlm_summary = cache["xlm_summary"]
                 # self.bert_summary += str(text)
         elif puretext:

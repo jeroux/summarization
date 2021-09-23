@@ -15,12 +15,17 @@ class Model:
     def __call__(self, text):
         start = time.time()
         self.summary = ""
+        print("One")
+        text = [text] if not isinstance(text, (list, tuple)) else text
+        print("Two")
         if self.cuda:
             self.model = self.model.cuda()
+        print("Three")
         for chapter in text:
+            print("Four")
+            print(chapter)
             words = chapter.split(" ")
-            MIN_LENGTH = max(len(chapter) // 100, 1)
-            MAX_LENGTH = max(len(chapter) // 90, 2)
+            print(len(words))
             while words:
                 batch_size = min(self.max_length, len(words))
                 batch, words = " ".join(words[:batch_size]), words[batch_size:]
