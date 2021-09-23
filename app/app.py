@@ -56,10 +56,10 @@ with st.sidebar.form(key='my_form'):
 
 "You selected:", title
 
-expander = st.expander("Bert")
-expander.write("Here will come the Bart summary")
-expander2 = st.expander("GPT")
-expander3 = st.expander("XLM")
+# expander = st.expander("Bert")
+# expander.write("Here will come the Bart summary")
+# expander2 = st.expander("GPT")
+expander3 = st.expander("facebook/bart-large-xsum")
 expander4 = st.expander('FAQ')
 
 
@@ -79,8 +79,8 @@ if submit_button:
     t5 = f"<p align='justify'>Question: {question}</p><p align='justify'>Answer: {answer}</p>"
 
 
-expander.write(t1, unsafe_allow_html=True)
-expander2.write(t2, unsafe_allow_html=True)
+# expander.write(t1, unsafe_allow_html=True)
+# expander2.write(t2, unsafe_allow_html=True)
 expander3.write(t3, unsafe_allow_html=True)
 expander4.write(t4, unsafe_allow_html=True)
 expander4.write(t5, unsafe_allow_html=True)
