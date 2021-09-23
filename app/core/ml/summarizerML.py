@@ -38,11 +38,8 @@ class SummarizerML(BreakDownBook):
                 # gpt2(text)
                 xlm(text)
                 # self.bert_summary = bert.summary
-                # print(self.bert_summary)
                 # self.gpt_summary = gpt2.summary
-                # print(self.gpt_summary)
                 self.xlm_summary = xlm.summary
-                print(self.xlm_summary)
 
                 self.save_cache()
             else:

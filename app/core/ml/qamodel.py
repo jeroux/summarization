@@ -46,7 +46,6 @@ class QABookSummerizerML(SummarizerML):
             self.tokenizer.convert_ids_to_tokens(input_ids[answer_start:answer_end]))
         # Combine the tokens in the answer and print it out.""
         answer = answer.replace("#", "").replace("<s>", "").replace("</s>", "")
-        print(answer, answer.startswith(question.lower()))
         if not answer or answer.startswith(question.lower()):
             answer = "No answer found"
         return answer

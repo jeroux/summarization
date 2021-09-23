@@ -20,7 +20,6 @@ class Model:
             self.model = self.model.cuda()
         for chapter in text:
             words = chapter.split(" ")
-            print(len(words))
             outputs = list()
             while words:
                 batch_size = min(self.max_length, len(words))
@@ -31,7 +30,7 @@ class Model:
                 if self.cuda:
                     inputs = {k: v.cuda() for k, v in inputs.items()}
                 ids = inputs["input_ids"]
-                outputs = self.model.generate(ids, length_penalty=2.0, num_beams=4, early_stopping=True, max_length=120)
+                outputs = self.model.generate(ids, length_penalty=2.0, num_beams=4, early_stopping=True, max_length=200)
             self.summary += "\n" + self.tokenizer.decode(outputs[0]).replace("  ", " ").replace("</s>", "").replace("<s>", "")
         print(time.time() - start, self.__class__)
         return self.summary

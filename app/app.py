@@ -41,7 +41,7 @@ def generate_summary(book_id):
     return text1, text2, text3, text4, summerizer_model
 
 
-t1 = t2 = t3 = t4 = ''
+t1 = t2 = t3 = t4 = t5 = ''
 books, titles = get_books_data()
 st.title("Summarizer")
 
@@ -76,10 +76,11 @@ if submit_button:
 
     t1, t2, t3, t4, summerizer_model = generate_summary(book_id)
     answer = summerizer_model.qa(question) if question else "No question asked"
-    t4 += f"\nQuestion: {question}\nAnswer: {answer}"
+    t5 = f"<p align='justify'>Question: {question}</p><p align='justify'>Answer: {answer}</p>"
 
 
 expander.write(t1, unsafe_allow_html=True)
 expander2.write(t2, unsafe_allow_html=True)
 expander3.write(t3, unsafe_allow_html=True)
 expander4.write(t4, unsafe_allow_html=True)
+expander4.write(t5, unsafe_allow_html=True)
