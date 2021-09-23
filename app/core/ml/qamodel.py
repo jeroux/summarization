@@ -28,7 +28,7 @@ class QABookSummerizerML(SummarizerML):
         inputs = self.tokenizer.encode_plus(question.lower(), answer_text, add_special_tokens=True, return_tensors="pt",
                                             max_length=512, truncation=True)
         if self.cuda:
-            input_ids = {k:v.cuda() for k, v in inputs.items()}
+            inputs = {k:v.cuda() for k, v in inputs.items()}
         input_ids = inputs["input_ids"].tolist()[0]
         outputs = self.model(**inputs)
         answer_start_scores = outputs.start_logits.cpu()
@@ -56,7 +56,8 @@ class QABookSummerizerML(SummarizerML):
         q_a = pd.DataFrame(q_a_list, columns=("Question", "Answer"), dtype=str)
         for i, question in self.questions.iterrows():
             question = question[0]
-            q_a.append({"Question": self.clean_text(question), "Answer": self.prettify_text(self.qa(question))}, ignore_index=True)
+            q_a.append({"Question": self.clean_text(question), "Answer": self.prettify_text(self.qa(question))},
+                       ignore_index=True)
         return q_a
 
     @staticmethod
