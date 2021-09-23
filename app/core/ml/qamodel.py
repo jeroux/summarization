@@ -8,8 +8,9 @@ from core.ml.summarizerML import SummarizerML
 
 
 class QABookSummerizerML(SummarizerML):
-    def __init__(self, html_filepath, chapters_summary_limit=-1, cuda=False):
+    def __init__(self, html_filepath=None, puretext=None, chapters_summary_limit=-1, cuda=False):
         super(QABookSummerizerML, self).__init__(html_filepath=html_filepath,
+                                                 puretext=puretext,
                                                  chapters_summary_limit=chapters_summary_limit)
         self.tokenizer = AutoTokenizer.from_pretrained("deepset/roberta-base-squad2")
         self.model = AutoModelForQuestionAnswering.from_pretrained("deepset/roberta-base-squad2")
@@ -44,8 +45,9 @@ class QABookSummerizerML(SummarizerML):
             # self.tokenizer.convert_ids_to_tokens(input_ids[answer_start:answer_end]))
             self.tokenizer.convert_ids_to_tokens(input_ids[answer_start:answer_end]))
         # Combine the tokens in the answer and print it out.""
-        answer = answer.replace("#", "")
-
+        answer = answer.replace("#", "").replace("<s>", "").replace("</s>", "")
+        if not answer:
+            answer = "No answer found"
         return answer
 
     def faq(self):
@@ -71,10 +73,8 @@ class QABookSummerizerML(SummarizerML):
 if __name__ == "__main__":
     ROOTPATH = (os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
     DATAPATH = os.path.join(ROOTPATH, "data")
-    qab = QABookSummerizerML(os.path.join(DATAPATH, "103.html"), 200, cuda=True)
+    qab = QABookSummerizerML(os.path.join(DATAPATH, "1342.html"), 200, cuda=True)
 
     print("Question: Who is the main character?", "\nAnswer: " + qab("Who is the main character?"))
-    print("Question: What is the main challenge?", "\nAnswer: " + qab("What is the main challenge?"))
-    print(qab("What is the main challenge?"))
-    print("Question: Who follows Phileas Fogg?", "\nAnswer: " + qab("Who follows Phileas Fogg??"))
-    print("Question: What is the hero's task?", "\nAnswer: " + qab("What is the hero's task?"))
+    print("Question: Who is Passepartout?", "\nAnswer: " + qab("Who is Passepartout?"))
+    print("Question: Who is Aouta?", "\nAnswer: " + qab("Who is Aouta?"))
