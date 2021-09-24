@@ -30,7 +30,7 @@ class Model:
                 if self.cuda:
                     inputs = {k: v.cuda() for k, v in inputs.items()}
                 ids = inputs["input_ids"]
-                outputs = self.model.generate(ids, length_penalty=2.0, num_beams=4, early_stopping=True, max_length=200)
+                outputs = self.model.generate(ids, length_penalty=1.5, num_beams=4, early_stopping=True, max_length=250)
             self.summary += "\n" + self.tokenizer.decode(outputs[0]).replace("  ", " ").replace("</s>", "").replace("<s>", "")
         print(time.time() - start, self.__class__)
         return self.summary
